@@ -1,5 +1,14 @@
 name: test-development
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - server/**
+      - .github/workflows/**
+      - third_party/go/**
+      - go.mod
+      - go.sum
+      - .plzconfig
+  pull_request:
 jobs:
   build:
     runs-on: ubuntu-latest
