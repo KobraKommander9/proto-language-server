@@ -11,7 +11,7 @@ jobs:
           go-version: 1.19
           cache: true
       - name: setup please
-        run: curl https://get.please.build | bash
+        run: curl https://get.please.build | bash && source ~/.profile
       - name: build
         run: plz build ./...
   test:
@@ -24,7 +24,7 @@ jobs:
           go-version: 1.19
           cache: true
       - name: setup please
-        run: curl https://get.please.build | bash
+        run: curl https://get.please.build | bash && source ~/.profile
       - name: test
         run: plz test ./...
   lint:
