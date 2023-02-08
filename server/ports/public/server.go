@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License along with
 // protobuf-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package blank is a dummy package
-package blank
+// Package public defines how a public facing entity should behave
+package public
 
-// Client -
-type Client interface {
-	Close() error
+// Server -
+type Server interface {
+	Serve() error
 }

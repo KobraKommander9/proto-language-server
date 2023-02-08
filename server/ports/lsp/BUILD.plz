@@ -1,5 +1,5 @@
 go_library(
-    name = "blank",
-    srcs = ["client.go"],
+    name = "server",
+    srcs = ["service.go"],
     visibility = ["//server/..."],
 )
