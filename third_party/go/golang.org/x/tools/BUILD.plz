@@ -1,0 +1,32 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "tools",
+    install = [
+        "go/ast/astutil",
+        "go/gcexportdata",
+        "go/internal/gcimporter",
+        "go/internal/packagesdriver",
+        "go/packages",
+        "imports",
+        "internal/event",
+        "internal/event/core",
+        "internal/event/keys",
+        "internal/event/label",
+        "internal/fastwalk",
+        "internal/gocommand",
+        "internal/gopathwalk",
+        "internal/imports",
+        "internal/packagesinternal",
+        "internal/typeparams",
+        "internal/typesinternal",
+    ],
+    module = "golang.org/x/tools",
+    # version = "gopls/v0.7.1",
+    version = "v0.1.5",
+    deps = [
+        "//third_party/go/golang.org/x/mod",
+        "//third_party/go/golang.org/x/sys",
+        "//third_party/go/golang.org/x/xerrors",
+    ],
+)

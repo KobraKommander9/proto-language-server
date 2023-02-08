@@ -17,4 +17,5 @@ gitfunctions = True
 preloadbuilddefs = build_defs/go_override.build_defs
 
 [go]
+importpath = github.com/KobraKommander9/protobuf-language-server
 gotool = //tools/go:gosdk|go

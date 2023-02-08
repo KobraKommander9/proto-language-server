@@ -1,0 +1,14 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "mod",
+    install = [
+        "internal/lazyregexp",
+        "modfile",
+        "module",
+        "semver",
+    ],
+    module = "golang.org/x/mod",
+    version = "v0.4.2",
+    deps = ["//third_party/go/golang.org/x/xerrors"],
+)
