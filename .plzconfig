@@ -1,0 +1,20 @@
+[please]
+version = 16.19.0
+
+[build]
+lang = en_US.UTF-8
+
+[test]
+; how long a test can run
+timeout = 10
+
+[parse]
+buildfilename = BUILD.plz
+buildfilename = BUILD
+gitfunctions = True
+
+; this allows us to wrap the builtin go rules and inject our own functionality
+preloadbuilddefs = build_defs/go_override.build_defs
+
+[go]
+gotool = //tools/go:gosdk|go

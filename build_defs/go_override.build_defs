@@ -1,0 +1,8 @@
+def test_hook(name: str, srcs:list, deps:list=[]):
+    return build_rule(
+        name = f'{name}_test_hook',
+        srcs = srcs,
+        cmd = "echo 'running go fmt...' && echo 't-t-t-testing' > $OUT",
+        deps = deps,
+        outs = ["output.txt"],
+    )

@@ -1,0 +1,11 @@
+# please
+/.plzconfig.local
+.plz-cache
+.plz_clean*
+plz-out
+
+# mockgen
+**/*.mg.go
+
+# other
+.DS_Store
