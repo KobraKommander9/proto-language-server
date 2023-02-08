@@ -10,6 +10,8 @@ jobs:
         with:
           go-version: 1.19
           cache: true
+      - name: setup please
+        run: curl https://get.please.build | bash
       - name: build
         run: plz build ./...
   test:
@@ -21,6 +23,8 @@ jobs:
         with:
           go-version: 1.19
           cache: true
+      - name: setup please
+        run: curl https://get.please.build | bash
       - name: test
         run: plz test ./...
   lint:
@@ -32,5 +36,7 @@ jobs:
         with:
           go-version: 1.19
           cache: true
+      - name: setup revive
+        run: go install github.com/mgechev/revive@latest
       - name: lint
         run: revive -exclude "plz-out/..."  -config ./config.toml -formatter default ./...
