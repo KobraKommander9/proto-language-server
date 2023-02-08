@@ -1,0 +1,9 @@
+go_library(
+    name = "cmd",
+    srcs = ["root.go"],
+    visibility = ["//..."],
+    deps = [
+        "//third_party/go/github.com/sirupsen/logrus",
+        "//third_party/go/github.com/spf13/cobra",
+    ],
+)

@@ -17,5 +17,9 @@ gitfunctions = True
 preloadbuilddefs = build_defs/go_override.build_defs
 
 [go]
-importpath = github.com/KobraKommander9/protobuf-language-server
+importpath = github.com/KobraKommander9/proto-language-server
 gotool = //tools/go:gosdk|go
+
+[alias "go-get"]
+desc = Runs the go deps tool to install new dependencies into the repo
+cmd = run //tools:go-deps -- -s -w

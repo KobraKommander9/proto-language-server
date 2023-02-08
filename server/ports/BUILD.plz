@@ -7,6 +7,6 @@ go_mock(
     interfaces = [
         "Client",
     ],
-    package = "github.com/KobraKommander9/protobuf-language-server/server/ports/blank",
+    package = "github.com/KobraKommander9/proto-language-server/server/ports/blank",
     deps = ["//server/ports/blank"],
 )
