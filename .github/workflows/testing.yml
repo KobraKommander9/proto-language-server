@@ -40,9 +40,9 @@ jobs:
         run: go install github.com/mgechev/revive@latest
       - name: lint
         run: |
-          revive -exclude "plz-out/..." -config ./config.toml -formatter default ./... &2>1 revive_report.txt \
-          G_PROBLEMS=$( wc -l < revive_report.txt ) \
-          if [[ "$G_PROBLEMS" -gt 0 ]]; then \
-            echo -e "\033[0;31mError. Number of problems ($G_PROBLEMS) exceeded acceptable value of 0" \
-            exit 1 \
+          revive -exclude "plz-out/..." -config ./config.toml -formatter default ./... &2>1 revive_report.txt
+          G_PROBLEMS=$( wc -l < revive_report.txt )
+          if [[ "$G_PROBLEMS" -gt 0 ]]; then
+            echo -e "\033[0;31mError. Number of problems ($G_PROBLEMS) exceeded acceptable value of 0"
+            exit 1
           fi
