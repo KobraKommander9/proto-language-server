@@ -2,9 +2,9 @@ WOLLEMI_VERSION = "v0.8.1"
 
 remote_file(
     name = "binary",
-    url = f"https://github.com/tcncloud/wollemi/releases/download/{WOLLEMI_VERSION}/wollemi-{WOLLEMI_VERSION}-{CONFIG.HOSTOS}-{CONFIG.HOSTARCH}.tar.gz",
-    extract = True,
     binary = True,
+    extract = True,
+    url = f"https://github.com/tcncloud/wollemi/releases/download/{WOLLEMI_VERSION}/wollemi-{WOLLEMI_VERSION}-{CONFIG.HOSTOS}-{CONFIG.HOSTARCH}.tar.gz",
 )
 
 build_rule(

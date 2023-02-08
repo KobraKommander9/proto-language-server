@@ -1,0 +1,12 @@
+subinclude("//build_defs:go")
+
+package(default_visibility = ["//server/..."])
+
+go_mock(
+    name = "mock_blank",
+    interfaces = [
+        "Client",
+    ],
+    package = "github.com/KobraKommander9/protobuf-language-server/server/ports/blank",
+    deps = ["//server/ports/blank"],
+)

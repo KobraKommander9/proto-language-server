@@ -1,5 +1,14 @@
 name: test-development
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - server/**
+      - .github/workflows/**
+      - third_party/go/**
+      - go.mod
+      - go.sum
+      - .plzconfig
+  pull_request:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,8 +19,10 @@ jobs:
         with:
           go-version: 1.19
           cache: true
+      - name: setup please
+        run: curl https://get.please.build | bash
       - name: build
-        run: plz build ./...
+        run: source ~/.profile && plz build ./...
   test:
     runs-on: ubuntu-latest
     steps:
@@ -21,8 +32,10 @@ jobs:
         with:
           go-version: 1.19
           cache: true
+      - name: setup please
+        run: curl https://get.please.build | bash
       - name: test
-        run: plz test ./...
+        run: source ~/.profile && plz test ./...
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -32,5 +45,13 @@ jobs:
         with:
           go-version: 1.19
           cache: true
+      - name: setup revive
+        run: go install github.com/mgechev/revive@latest
       - name: lint
-        run: revive -exclude "plz-out/..."  -config ./config.toml -formatter default ./...
+        run: |
+          revive -exclude "plz-out/..." -config ./config.toml -formatter default ./... &2>1 revive_report.txt
+          G_PROBLEMS=$( wc -l < revive_report.txt )
+          if [[ "$G_PROBLEMS" -gt 0 ]]; then
+            echo -e "\033[0;31mError. Number of problems ($G_PROBLEMS) exceeded acceptable value of 0"
+            exit 1
+          fi
