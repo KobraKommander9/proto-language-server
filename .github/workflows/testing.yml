@@ -41,7 +41,7 @@ jobs:
       - name: lint
         run: |
           revive -exclude "plz-out/..." -config ./config.toml -formatter default ./... &2>1 revive_report.txt \
-          G_PROBLEMS=$( egrep -v "$(date +%Y/%m/%d)" $REVIVE_REPORT_FILE | wc -l ) \
+          G_PROBLEMS=$( wc -l < revive_report.txt ) \
           if [[ "$G_PROBLEMS" -gt 0 ]]; then \
             echo -e "\033[0;31mError. Number of problems ($G_PROBLEMS) exceeded acceptable value of 0" \
             exit 1 \
