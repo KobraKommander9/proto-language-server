@@ -13,7 +13,7 @@ jobs:
       - name: setup please
         run: curl https://get.please.build | bash && source ~/.profile
       - name: build
-        run: plz build ./...
+        run: please build ./...
   test:
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +26,7 @@ jobs:
       - name: setup please
         run: curl https://get.please.build | bash && source ~/.profile
       - name: test
-        run: plz test ./...
+        run: please test ./...
   lint:
     runs-on: ubuntu-latest
     steps:
