@@ -1,0 +1,36 @@
+name: test-development
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+          cache: true
+      - name: build
+        run: plz build ./...
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+          cache: true
+      - name: test
+        run: plz test ./...
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+          cache: true
+      - name: lint
+        run: revive -exclude "plz-out/..."  -config ./config.toml -formatter default ./...
