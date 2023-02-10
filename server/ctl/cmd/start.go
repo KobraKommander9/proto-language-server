@@ -61,7 +61,7 @@ var StartCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(StartCmd)
 
-	StartCmd.PersistentFlags().String(lspType, "http://127.0.0.1", "name and port for lsp service")
+	StartCmd.PersistentFlags().String(lspType, "http://127.0.0.1:8000", "name and port for lsp service")
 	_ = viper.BindPFlag(lspType, StartCmd.PersistentFlags().Lookup(lspType))
 }
 
@@ -70,7 +70,7 @@ func createLspServer(t string, service lsp.Service) (server public.Server, err e
 	case strings.HasPrefix(t, httpType):
 		log.Infof("creating http lsp service for address %s", t)
 		lsp := http.NewLspService(service)
-		server = http.NewPublicServer(t, lsp, &http.DefaultAccessor{})
+		server = http.NewPublicServer(strings.TrimPrefix(t, httpType), lsp, &http.DefaultAccessor{})
 
 	default:
 		return nil, fmt.Errorf("unknown lsp server type %s", t)
