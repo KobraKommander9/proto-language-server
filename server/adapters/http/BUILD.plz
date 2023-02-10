@@ -10,6 +10,7 @@ go_library(
         "//server/ports/http",
         "//server/ports/lsp",
         "//third_party/go/github.com/gorilla/mux",
+        "//third_party/go/github.com/gorilla/rpc",
         "//third_party/go/github.com/sirupsen/logrus",
     ],
 )

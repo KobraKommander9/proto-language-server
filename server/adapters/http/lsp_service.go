@@ -24,6 +24,8 @@ import (
 	"github.com/KobraKommander9/proto-language-server/server/ports/lsp"
 
 	m "github.com/gorilla/mux"
+	"github.com/gorilla/rpc"
+	"github.com/gorilla/rpc/json"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -63,11 +65,15 @@ func (*LspService) Name() string {
 
 // Register -
 func (s *LspService) Register(mux *http.ServeMux) error {
+	server := rpc.NewServer()
+	server.RegisterCodec(json.NewCodec(), "application/json")
+	server.RegisterCodec(json.NewCodec(), "application/json;charset=UTF-8")
+
 	r := m.NewRouter()
 	r.Use(s.loggingMiddleware)
 	r.Use(s.contectCheckerMiddleware)
 
-	r.HandleFunc("/", s.dummy)
+	r.HandleFunc("/", server)
 
 	mux.Handle("/", r)
 
@@ -107,8 +113,4 @@ func (*LspService) contectCheckerMiddleware(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
-}
-
-func (*LspService) dummy(w http.ResponseWriter, _ *http.Request) {
-	w.Write([]byte("sweet"))
 }
