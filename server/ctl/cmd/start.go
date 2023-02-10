@@ -18,7 +18,27 @@
 // Package cmd defines and implements commands for the server
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/KobraKommander9/proto-language-server/server/adapters/http"
+	"github.com/KobraKommander9/proto-language-server/server/app"
+	"github.com/KobraKommander9/proto-language-server/server/ports/lsp"
+	"github.com/KobraKommander9/proto-language-server/server/ports/public"
+
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+)
+
+const (
+	lspType = "lsp-type"
+)
+
+const (
+	httpType = "http://"
+)
 
 // StartCmd -
 var StartCmd = &cobra.Command{
@@ -27,10 +47,34 @@ var StartCmd = &cobra.Command{
 	Long: `starts the omni api service.
 	Example: ./bin/apictl start`,
 	RunE: func(_ *cobra.Command, _ []string) error {
-		return nil
+		service := app.NewService()
+
+		server, err := createLspServer(viper.GetString(lspType), service)
+		if err != nil {
+			return fmt.Errorf("failed to create lsp server: %v", err)
+		}
+
+		return server.Serve()
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(StartCmd)
+
+	StartCmd.PersistentFlags().String(lspType, "http://127.0.0.1", "name and port for lsp service")
+	_ = viper.BindPFlag(lspType, StartCmd.PersistentFlags().Lookup(lspType))
+}
+
+func createLspServer(t string, service lsp.Service) (server public.Server, err error) {
+	switch {
+	case strings.HasPrefix(t, httpType):
+		log.Infof("creating http lsp service for address %s", t)
+		lsp := http.NewLspService(service)
+		server = http.NewPublicServer(t, lsp, &http.DefaultAccessor{})
+
+	default:
+		return nil, fmt.Errorf("unknown lsp server type %s", t)
+	}
+
+	return server, err
 }

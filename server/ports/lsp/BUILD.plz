@@ -1,5 +1,5 @@
 go_library(
-    name = "server",
+    name = "lsp",
     srcs = ["service.go"],
     visibility = ["//server/..."],
 )

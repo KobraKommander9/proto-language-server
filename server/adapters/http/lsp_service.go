@@ -18,14 +18,24 @@
 // Package http defines and implements types that interact with http
 package http
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/KobraKommander9/proto-language-server/server/ports/lsp"
+
+	m "github.com/gorilla/mux"
+)
 
 // LspService -
-type LspService struct{}
+type LspService struct {
+	service lsp.Service
+}
 
 // NewLspService -
-func NewLspService() *LspService {
-	return &LspService{}
+func NewLspService(service lsp.Service) *LspService {
+	return &LspService{
+		service: service,
+	}
 }
 
 // Close -
@@ -39,6 +49,8 @@ func (*LspService) Name() string {
 }
 
 // Register -
-func (*LspService) Register(_ *http.ServeMux) error {
+func (*LspService) Register(mux *http.ServeMux) error {
+	r := m.NewRouter()
+	mux.Handle("/", r)
 	return nil
 }

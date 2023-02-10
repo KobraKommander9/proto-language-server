@@ -1,0 +1,14 @@
+go_library(
+    name = "http",
+    srcs = [
+        "accessor.go",
+        "lsp_service.go",
+        "public_server.go",
+    ],
+    visibility = ["//..."],
+    deps = [
+        "//server/ports/http",
+        "//third_party/go/github.com/gorilla/mux",
+        "//third_party/go/github.com/sirupsen/logrus",
+    ],
+)

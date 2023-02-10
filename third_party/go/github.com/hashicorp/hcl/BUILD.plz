@@ -1,0 +1,25 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "hcl",
+    install = [
+        "",
+        "hcl/ast",
+        "hcl/parser",
+        "hcl/printer",
+        "hcl/scanner",
+        "hcl/strconv",
+        "hcl/token",
+        "json/parser",
+        "json/scanner",
+        "json/token",
+    ],
+    module = "github.com/hashicorp/hcl",
+    strip = [
+        "hcl/test-fixtures",
+        "json/test-fixtures",
+        "parser/test-fixtures",
+        "test-fixtures",
+    ],
+    version = "v1.0.0",
+)

@@ -1,0 +1,7 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "cast",
+    module = "github.com/spf13/cast",
+    version = "v1.3.0",
+)
