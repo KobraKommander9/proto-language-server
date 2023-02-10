@@ -15,17 +15,20 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package main defines the entry point to the server
-package main
+// Package http defines and implements types that interact with http
+package http
 
-import (
-	"os"
+import "github.com/KobraKommander9/proto-language-server/server/ports/http"
 
-	"github.com/KobraKommander9/proto-language-server/server/ctl/cmd"
-)
+// Accessor - interface abstracting the http client so we can test
+type Accessor interface {
+	Serve(addr string, service http.Service) (*http.Server, error)
+}
 
-func main() {
-	if err := cmd.RootCmd.Execute(); err != nil {
-		os.Exit(-1)
-	}
+// DefaultAccessor -
+type DefaultAccessor struct{}
+
+// Serve -
+func (*DefaultAccessor) Serve(addr string, service http.Service) (*http.Server, error) {
+	return http.Serve(addr, service)
 }

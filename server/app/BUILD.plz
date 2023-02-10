@@ -1,0 +1,5 @@
+go_library(
+    name = "app",
+    srcs = ["service.go"],
+    visibility = ["//..."],
+)

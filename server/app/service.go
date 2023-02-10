@@ -15,17 +15,18 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package main defines the entry point to the server
-package main
+// Package app defines and implements the domain of the server
+package app
 
-import (
-	"os"
+// Service -
+type Service struct{}
 
-	"github.com/KobraKommander9/proto-language-server/server/ctl/cmd"
-)
+// NewService -
+func NewService() *Service {
+	return &Service{}
+}
 
-func main() {
-	if err := cmd.RootCmd.Execute(); err != nil {
-		os.Exit(-1)
-	}
+// Close -
+func (*Service) Close() error {
+	return nil
 }

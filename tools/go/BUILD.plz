@@ -7,6 +7,6 @@ go_toolchain(
         "darwin_arm64",
     ],
     strip_srcs = False,
-    version = "1.19",
+    version = "1.18",
     visibility = ["PUBLIC"],
 )

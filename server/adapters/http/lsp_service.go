@@ -15,17 +15,42 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package main defines the entry point to the server
-package main
+// Package http defines and implements types that interact with http
+package http
 
 import (
-	"os"
+	"net/http"
 
-	"github.com/KobraKommander9/proto-language-server/server/ctl/cmd"
+	"github.com/KobraKommander9/proto-language-server/server/ports/lsp"
+
+	m "github.com/gorilla/mux"
 )
 
-func main() {
-	if err := cmd.RootCmd.Execute(); err != nil {
-		os.Exit(-1)
+// LspService -
+type LspService struct {
+	service lsp.Service
+}
+
+// NewLspService -
+func NewLspService(service lsp.Service) *LspService {
+	return &LspService{
+		service: service,
 	}
+}
+
+// Close -
+func (*LspService) Close() error {
+	return nil
+}
+
+// Name -
+func (*LspService) Name() string {
+	return "proto-language-server"
+}
+
+// Register -
+func (*LspService) Register(mux *http.ServeMux) error {
+	r := m.NewRouter()
+	mux.Handle("/", r)
+	return nil
 }

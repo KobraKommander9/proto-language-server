@@ -1,0 +1,5 @@
+go_library(
+    name = "public",
+    srcs = ["server.go"],
+    visibility = ["//..."],
+)

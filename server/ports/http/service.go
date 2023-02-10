@@ -15,17 +15,14 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package main defines the entry point to the server
-package main
+// Package http defines and implements types for communicating over http
+package http
 
-import (
-	"os"
+import "net/http"
 
-	"github.com/KobraKommander9/proto-language-server/server/ctl/cmd"
-)
-
-func main() {
-	if err := cmd.RootCmd.Execute(); err != nil {
-		os.Exit(-1)
-	}
+// Service -
+type Service interface {
+	Close() error
+	Name() string
+	Register(*http.ServeMux) error
 }
