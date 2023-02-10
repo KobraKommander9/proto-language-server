@@ -24,6 +24,19 @@ import (
 	"github.com/KobraKommander9/proto-language-server/server/ports/lsp"
 
 	m "github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
+)
+
+// Header key constants
+const (
+	ContentTypeKey = "content-type"
+)
+
+var (
+	allowedContentTypes = []string{
+		"utf8", // for backwards compatibility
+		"utf-8",
+	}
 )
 
 // LspService -
@@ -49,8 +62,53 @@ func (*LspService) Name() string {
 }
 
 // Register -
-func (*LspService) Register(mux *http.ServeMux) error {
+func (s *LspService) Register(mux *http.ServeMux) error {
 	r := m.NewRouter()
+	r.Use(s.loggingMiddleware)
+	r.Use(s.contectCheckerMiddleware)
+
+	r.HandleFunc("/", s.dummy)
+
 	mux.Handle("/", r)
+
 	return nil
+}
+
+func (*LspService) loggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.WithFields(log.Fields{
+			"header":        r.Header,
+			"url":           r.URL,
+			"form":          r.Form,
+			"contentLength": r.ContentLength,
+			"host":          r.Host,
+		}).Debugf("received http request to %v", r.URL)
+		next.ServeHTTP(w, r)
+	})
+}
+
+func (*LspService) contectCheckerMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		contentType := r.Header.Get(ContentTypeKey)
+
+		found := false
+		for _, ct := range allowedContentTypes {
+			if contentType == "" || contentType == ct {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			log.WithField("contentType", contentType).Warnf("received request with unallowed content type %s", contentType)
+			w.WriteHeader(http.StatusUnsupportedMediaType)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+func (*LspService) dummy(w http.ResponseWriter, _ *http.Request) {
+	w.Write([]byte("sweet"))
 }
