@@ -39,6 +39,6 @@ func NewLspServer(engine lsp.Engine) *LspServer {
 }
 
 // HandleRequest -
-func (*LspServer) HandleRequest(ctx context.Context, reply jsonrpc2.Replier, req jsonrpc2.Request) error {
+func (*LspServer) HandleRequest(_ context.Context, _ jsonrpc2.Replier, _ jsonrpc2.Request) error {
 	return nil
 }

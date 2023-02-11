@@ -27,6 +27,7 @@ import (
 
 const logKey = "log"
 
+// RootCmd -
 var RootCmd = &cobra.Command{
 	Use:          "server",
 	Short:        "cli for proto-language-server",

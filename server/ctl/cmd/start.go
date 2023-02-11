@@ -69,8 +69,8 @@ func createLspServer(t string, engine lsp.Engine) (server public.Server, err err
 	switch {
 	case strings.HasPrefix(t, jsonrpcType):
 		log.Infof("creating jsonrpc lsp service for address %s", t)
-		lsp := jsonrpc.NewLspServer(engine)
-		server = jsonrpc.NewPublicServer("tcp", strings.TrimPrefix(t, jsonrpcType), lsp, &jsonrpc.DefaultAccessor{})
+		lspServer := jsonrpc.NewLspServer(engine)
+		server = jsonrpc.NewPublicServer("tcp", strings.TrimPrefix(t, jsonrpcType), lspServer, &jsonrpc.DefaultAccessor{})
 
 	default:
 		return nil, fmt.Errorf("unknown lsp server type %s", t)

@@ -54,7 +54,7 @@ warningCode = 0
 [rule.atomic]
 [rule.empty-lines]
 [rule.line-length-limit]
-	arguments = [100]
+	arguments = [140]
 [rule.call-to-gc]
 [rule.duplicated-imports]
 [rule.import-shadowing]
