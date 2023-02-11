@@ -20,19 +20,17 @@ package jsonrpc
 
 import (
 	"context"
+	"fmt"
 
-	"go.lsp.dev/jsonrpc2"
+	p "go.lsp.dev/protocol"
 )
 
-// Accessor -
-type Accessor interface {
-	ListenAndServe(network, addr string, server jsonrpc2.StreamServer) error
+// ShowDocument -
+func (*LspServer) ShowDocument(ctx context.Context, params *p.ShowDocumentParams) (*p.ShowDocumentResult, error) {
+	return nil, fmt.Errorf("unimplemented")
 }
 
-// DefaultAccessor -
-type DefaultAccessor struct{}
-
-// ListenAndServe -
-func (*DefaultAccessor) ListenAndServe(network, addr string, server jsonrpc2.StreamServer) error {
-	return jsonrpc2.ListenAndServe(context.Background(), network, addr, server, 0)
+// WorkDoneProgressCancel -
+func (*LspServer) WorkDoneProgressCancel(ctx context.Context, params *p.WorkDoneProgressCancelParams) error {
+	return fmt.Errorf("unimplemented")
 }
