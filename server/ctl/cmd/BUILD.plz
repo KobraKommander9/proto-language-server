@@ -7,6 +7,8 @@ go_library(
     visibility = ["//..."],
     deps = [
         "//server/adapters/jsonrpc",
+        "//server/adapters/jsonrpc/accessor",
+        "//server/adapters/jsonrpc/public",
         "//server/app",
         "//server/ports/lsp",
         "//server/ports/public",

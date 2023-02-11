@@ -15,30 +15,37 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package jsonrpc defines and implements types that interact with jsonrpc
-package jsonrpc
+// Package public defines and implements public facing types for jsonrpc
+package public
 
 import (
 	"context"
 
-	"go.lsp.dev/jsonrpc2"
+	"github.com/KobraKommander9/proto-language-server/server/adapters/jsonrpc/accessor"
+
+	"go.lsp.dev/protocol"
+	"go.uber.org/zap"
 )
 
-// Accessor -
-type Accessor interface {
-	HandlerServer(h jsonrpc2.Handler) jsonrpc2.StreamServer
-	ListenAndServe(network, addr string, server jsonrpc2.StreamServer) error
+type socket struct {
+	accessor.JsonRpcAccessor
+	l    *zap.SugaredLogger
+	port uint32
 }
 
-// DefaultAccessor -
-type DefaultAccessor struct{}
-
-// HandlerServer -
-func (*DefaultAccessor) HandlerServer(h jsonrpc2.Handler) jsonrpc2.StreamServer {
-	return jsonrpc2.HandlerServer(h)
+func newSocket(a accessor.JsonRpcAccessor, port uint32) *socket {
+	return &socket{
+		JsonRpcAccessor: a,
+		l:               zap.S().Named("socket"),
+		port:            port,
+	}
 }
 
-// ListenAndServe -
-func (*DefaultAccessor) ListenAndServe(network, addr string, server jsonrpc2.StreamServer) error {
-	return jsonrpc2.ListenAndServe(context.Background(), network, addr, server, 0)
+func (s *socket) apply(opts *ServerOptions) {
+	opts.method = s
+}
+
+func (s *socket) serve(ctx context.Context, server protocol.Server) error {
+	s.l.Infof("serving jsonrpc server over socket with port %d", s.port)
+	return s.ListenAndServe(ctx, s.port, server)
 }

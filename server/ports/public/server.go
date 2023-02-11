@@ -18,7 +18,9 @@
 // Package public defines how a public facing entity should behave
 package public
 
+import "context"
+
 // Server -
 type Server interface {
-	Serve() error
+	Serve(ctx context.Context) error
 }

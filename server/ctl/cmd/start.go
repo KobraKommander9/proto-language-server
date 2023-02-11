@@ -19,10 +19,13 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
 	"github.com/KobraKommander9/proto-language-server/server/adapters/jsonrpc"
+	"github.com/KobraKommander9/proto-language-server/server/adapters/jsonrpc/accessor"
+	jp "github.com/KobraKommander9/proto-language-server/server/adapters/jsonrpc/public"
 	"github.com/KobraKommander9/proto-language-server/server/app"
 	"github.com/KobraKommander9/proto-language-server/server/ports/lsp"
 	"github.com/KobraKommander9/proto-language-server/server/ports/public"
@@ -33,7 +36,9 @@ import (
 )
 
 const (
-	lspType = "lsp-type"
+	lspType      = "lsp-type"
+	stdioMethod  = "stdio"
+	socketMethod = "port"
 )
 
 const (
@@ -47,6 +52,8 @@ var StartCmd = &cobra.Command{
 	Long: `starts the omni api service.
 	Example: ./bin/apictl start`,
 	RunE: func(_ *cobra.Command, _ []string) error {
+		ctx := context.Background()
+
 		engine := app.NewEngine(zap.S())
 
 		server, err := createLspServer(viper.GetString(lspType), engine)
@@ -54,26 +61,50 @@ var StartCmd = &cobra.Command{
 			return fmt.Errorf("failed to create lsp server: %v", err)
 		}
 
-		return server.Serve()
+		return server.Serve(ctx)
 	},
 }
 
 func init() {
 	RootCmd.AddCommand(StartCmd)
 
-	StartCmd.PersistentFlags().String(lspType, "jsonrpc://127.0.0.1:8000", "name and port for lsp service")
+	StartCmd.PersistentFlags().String(lspType, jsonrpcType, "type of lsp server")
 	_ = viper.BindPFlag(lspType, StartCmd.PersistentFlags().Lookup(lspType))
+
+	StartCmd.PersistentFlags().Bool(stdioMethod, false, "if the lsp server should handle requests over stdio")
+	_ = viper.BindPFlag(stdioMethod, StartCmd.PersistentFlags().Lookup(stdioMethod))
+
+	StartCmd.PersistentFlags().Uint32(socketMethod, 0, "the port when using sockets as the communication channel")
+	_ = viper.BindPFlag(socketMethod, StartCmd.PersistentFlags().Lookup(socketMethod))
 }
 
 func createLspServer(t string, engine lsp.Engine) (server public.Server, err error) {
 	switch {
 	case strings.HasPrefix(t, jsonrpcType):
-		zap.S().Infof("creating jsonrpc lsp service for address %s", t)
 		lspServer := jsonrpc.NewLspServer(zap.S(), engine)
-		server = jsonrpc.NewPublicServer(zap.S(), "tcp", strings.TrimPrefix(t, jsonrpcType), lspServer, &jsonrpc.DefaultAccessor{})
+		server, err = createPublicServer(lspServer)
 
 	default:
 		return nil, fmt.Errorf("unknown lsp server type %s", t)
+	}
+
+	return server, err
+}
+
+func createPublicServer(lspServer *jsonrpc.LspServer) (server public.Server, err error) {
+	port := viper.GetUint32(socketMethod)
+
+	switch {
+	case port != 0:
+		zap.S().Infof("")
+		server = jp.NewPublicServer(zap.S(), lspServer, jp.WithSocket(&accessor.DefaultJsonRpcAccessor{}, port))
+
+	case viper.GetBool(stdioMethod):
+		zap.S().Infof("creating jsonrpc lsp server with stdio communication")
+		server = jp.NewPublicServer(zap.S(), lspServer, jp.WithStdio(&accessor.DefaultJsonRpcAccessor{}, &accessor.DefaultOSAccessor{}))
+
+	default:
+		return nil, fmt.Errorf("no method type provided for lsp server")
 	}
 
 	return server, err
