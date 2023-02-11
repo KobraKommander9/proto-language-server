@@ -1,0 +1,7 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "uri",
+    module = "go.lsp.dev/uri",
+    version = "v0.3.0",
+)

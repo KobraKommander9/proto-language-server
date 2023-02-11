@@ -21,21 +21,23 @@ package jsonrpc
 import (
 	"github.com/KobraKommander9/proto-language-server/server/ports/jsonrpc"
 
-	log "github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 )
 
 // PublicServer -
 type PublicServer struct {
 	Accessor
+	l       *zap.SugaredLogger
 	network string
 	addr    string
 	server  jsonrpc.Server
 }
 
 // NewPublicServer -
-func NewPublicServer(network, addr string, server jsonrpc.Server, accessor Accessor) *PublicServer {
+func NewPublicServer(l *zap.SugaredLogger, network, addr string, server jsonrpc.Server, accessor Accessor) *PublicServer {
 	return &PublicServer{
 		Accessor: accessor,
+		l:        l.Named("public"),
 		network:  network,
 		addr:     addr,
 		server:   server,
@@ -44,6 +46,6 @@ func NewPublicServer(network, addr string, server jsonrpc.Server, accessor Acces
 
 // Serve -
 func (s *PublicServer) Serve() error {
-	log.Infof("serving jsonrpc server with %s on %s", s.network, s.addr)
+	s.l.Infof("serving jsonrpc server with %s on %s", s.network, s.addr)
 	return s.ListenAndServe(s.network, s.addr, s.HandlerServer(s.server.HandleRequest))
 }

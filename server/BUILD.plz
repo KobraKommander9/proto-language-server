@@ -1,7 +1,7 @@
 sh_cmd(
     name = "start_server",
     cmd = "$(out_location //server/ctl) start \
-            --log=DEBUG",
+            --debug",
     visibility = ["//server/..."],
     deps = [
         "//server/ctl",

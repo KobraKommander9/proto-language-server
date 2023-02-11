@@ -1,0 +1,10 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "multierr",
+    module = "go.uber.org/multierr",
+    version = "v1.9.0",
+    deps = [
+        "//third_party/go/go.uber.org/atomic",
+    ],
+)

@@ -19,13 +19,14 @@
 package cmd
 
 import (
-	"fmt"
-
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
-const logKey = "log"
+const debugKey = "debug"
+
+var logger *zap.Logger
 
 // RootCmd -
 var RootCmd = &cobra.Command{
@@ -33,20 +34,14 @@ var RootCmd = &cobra.Command{
 	Short:        "cli for proto-language-server",
 	SilenceUsage: true,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		log.SetFormatter(&log.JSONFormatter{})
-
-		levelString, err := cmd.Flags().GetString(logKey)
-		if err != nil {
-			log.Info("no log flag passed in - using Info log level")
-			levelString = "INFO"
+		var logger *zap.Logger
+		if viper.GetBool(debugKey) {
+			logger, _ = zap.NewDevelopment()
+		} else {
+			logger, _ = zap.NewProduction(zap.WithCaller(false))
 		}
 
-		level, err := log.ParseLevel(levelString)
-		if err != nil {
-			return fmt.Errorf("could not parse log level: %v", err)
-		}
-		log.SetLevel(level)
-
+		zap.ReplaceGlobals(logger)
 		return nil
 	},
 }
@@ -54,8 +49,8 @@ var RootCmd = &cobra.Command{
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	// Set default log level to error
-	RootCmd.PersistentFlags().String(logKey, "info", "set log level")
+	RootCmd.PersistentFlags().Bool(debugKey, false, "set logger to debug level")
+	_ = viper.BindPFlag(debugKey, RootCmd.PersistentFlags().Lookup(debugKey))
 }
 
 func initConfig() {}

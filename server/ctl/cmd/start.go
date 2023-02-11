@@ -27,9 +27,9 @@ import (
 	"github.com/KobraKommander9/proto-language-server/server/ports/lsp"
 	"github.com/KobraKommander9/proto-language-server/server/ports/public"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 const (
@@ -47,7 +47,7 @@ var StartCmd = &cobra.Command{
 	Long: `starts the omni api service.
 	Example: ./bin/apictl start`,
 	RunE: func(_ *cobra.Command, _ []string) error {
-		engine := app.NewEngine()
+		engine := app.NewEngine(zap.S())
 
 		server, err := createLspServer(viper.GetString(lspType), engine)
 		if err != nil {
@@ -68,9 +68,9 @@ func init() {
 func createLspServer(t string, engine lsp.Engine) (server public.Server, err error) {
 	switch {
 	case strings.HasPrefix(t, jsonrpcType):
-		log.Infof("creating jsonrpc lsp service for address %s", t)
-		lspServer := jsonrpc.NewLspServer(engine)
-		server = jsonrpc.NewPublicServer("tcp", strings.TrimPrefix(t, jsonrpcType), lspServer, &jsonrpc.DefaultAccessor{})
+		zap.S().Infof("creating jsonrpc lsp service for address %s", t)
+		lspServer := jsonrpc.NewLspServer(zap.S(), engine)
+		server = jsonrpc.NewPublicServer(zap.S(), "tcp", strings.TrimPrefix(t, jsonrpcType), lspServer, &jsonrpc.DefaultAccessor{})
 
 	default:
 		return nil, fmt.Errorf("unknown lsp server type %s", t)

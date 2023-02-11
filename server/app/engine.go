@@ -18,23 +18,31 @@
 // Package app defines and implements the domain of the server
 package app
 
-import "sync"
+import (
+	"sync"
+
+	"go.uber.org/zap"
+)
 
 // Engine -
 type Engine struct {
+	l           *zap.SugaredLogger
 	lock        *sync.Mutex
 	initialized bool
 }
 
 // NewEngine -
-func NewEngine() *Engine {
+func NewEngine(l *zap.SugaredLogger) *Engine {
 	return &Engine{
+		l:    l.Named("engine"),
 		lock: &sync.Mutex{},
 	}
 }
 
 // Close -
-func (*Engine) Close() error {
+func (e *Engine) Close() error {
+	e.l.Infof("closing engine...")
+	e.l.Infof("successfully closed engine")
 	return nil
 }
 

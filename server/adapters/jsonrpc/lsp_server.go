@@ -24,16 +24,19 @@ import (
 	"github.com/KobraKommander9/proto-language-server/server/ports/lsp"
 
 	"go.lsp.dev/jsonrpc2"
+	"go.uber.org/zap"
 )
 
 // LspServer -
 type LspServer struct {
+	l      *zap.SugaredLogger
 	engine lsp.Engine
 }
 
 // NewLspServer -
-func NewLspServer(engine lsp.Engine) *LspServer {
+func NewLspServer(l *zap.SugaredLogger, engine lsp.Engine) *LspServer {
 	return &LspServer{
+		l:      l.Named("lsp_server"),
 		engine: engine,
 	}
 }

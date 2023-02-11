@@ -1,0 +1,19 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "zap",
+    install = [
+        "",
+        "buffer",
+        "internal",
+        "internal/bufferpool",
+        "internal/color",
+        "internal/exit",
+        "zapcore",
+    ],
+    module = "go.uber.org/zap",
+    version = "v1.24.0",
+    deps = [
+        "//third_party/go/go.uber.org/multierr",
+    ],
+)
