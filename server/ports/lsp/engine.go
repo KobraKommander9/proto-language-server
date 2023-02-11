@@ -18,7 +18,7 @@
 // Package lsp defines how to interact with the lsp
 package lsp
 
-// Service -
-type Service interface {
+// Engine -
+type Engine interface {
 	Close() error
 }

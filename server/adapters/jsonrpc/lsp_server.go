@@ -28,13 +28,13 @@ import (
 
 // LspServer -
 type LspServer struct {
-	service lsp.Service
+	engine lsp.Engine
 }
 
 // NewLspServer -
-func NewLspServer(service lsp.Service) *LspServer {
+func NewLspServer(engine lsp.Engine) *LspServer {
 	return &LspServer{
-		service: service,
+		engine: engine,
 	}
 }
 

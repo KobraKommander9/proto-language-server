@@ -47,9 +47,9 @@ var StartCmd = &cobra.Command{
 	Long: `starts the omni api service.
 	Example: ./bin/apictl start`,
 	RunE: func(_ *cobra.Command, _ []string) error {
-		service := app.NewService()
+		engine := app.NewEngine()
 
-		server, err := createLspServer(viper.GetString(lspType), service)
+		server, err := createLspServer(viper.GetString(lspType), engine)
 		if err != nil {
 			return fmt.Errorf("failed to create lsp server: %v", err)
 		}
@@ -65,11 +65,11 @@ func init() {
 	_ = viper.BindPFlag(lspType, StartCmd.PersistentFlags().Lookup(lspType))
 }
 
-func createLspServer(t string, service lsp.Service) (server public.Server, err error) {
+func createLspServer(t string, engine lsp.Engine) (server public.Server, err error) {
 	switch {
 	case strings.HasPrefix(t, jsonrpcType):
 		log.Infof("creating jsonrpc lsp service for address %s", t)
-		lsp := jsonrpc.NewLspServer(service)
+		lsp := jsonrpc.NewLspServer(engine)
 		server = jsonrpc.NewPublicServer("tcp", strings.TrimPrefix(t, jsonrpcType), lsp, &jsonrpc.DefaultAccessor{})
 
 	default:

@@ -18,15 +18,15 @@
 // Package app defines and implements the domain of the server
 package app
 
-// Service -
-type Service struct{}
+// Engine -
+type Engine struct{}
 
-// NewService -
-func NewService() *Service {
-	return &Service{}
+// NewEngine -
+func NewEngine() *Engine {
+	return &Engine{}
 }
 
 // Close -
-func (*Service) Close() error {
+func (*Engine) Close() error {
 	return nil
 }
