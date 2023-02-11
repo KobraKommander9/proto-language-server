@@ -22,7 +22,6 @@ go_module(
         "internal/typesinternal",
     ],
     module = "golang.org/x/tools",
-    # version = "gopls/v0.7.1",
     version = "v0.1.5",
     deps = [
         "//third_party/go/golang.org/x/mod",

@@ -7,11 +7,13 @@ go_library(
     visibility = ["//..."],
     deps = [
         "//server/adapters/jsonrpc",
+        "//server/adapters/jsonrpc/accessor",
+        "//server/adapters/jsonrpc/public",
         "//server/app",
         "//server/ports/lsp",
         "//server/ports/public",
-        "//third_party/go/github.com/sirupsen/logrus",
         "//third_party/go/github.com/spf13/cobra",
         "//third_party/go/github.com/spf13/viper",
+        "//third_party/go/go.uber.org/zap",
     ],
 )

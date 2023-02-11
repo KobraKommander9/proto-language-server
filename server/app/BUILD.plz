@@ -1,5 +1,6 @@
 go_library(
     name = "app",
-    srcs = ["service.go"],
+    srcs = ["engine.go"],
     visibility = ["//..."],
+    deps = ["//third_party/go/go.uber.org/zap"],
 )

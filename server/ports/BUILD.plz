@@ -5,7 +5,7 @@ package(default_visibility = ["//server/..."])
 go_mock(
     name = "mock_lsp",
     interfaces = [
-        "Service",
+        "Engine",
     ],
     package = "github.com/KobraKommander9/proto-language-server/server/ports/lsp",
     deps = ["//server/ports/lsp"],

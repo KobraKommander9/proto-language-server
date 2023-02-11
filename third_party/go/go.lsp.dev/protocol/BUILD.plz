@@ -1,0 +1,14 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "protocol",
+    module = "go.lsp.dev/protocol",
+    version = "v0.12.0",
+    deps = [
+        "//third_party/go/github.com/segmentio/encoding",
+        "//third_party/go/go.lsp.dev/jsonrpc2",
+        "//third_party/go/go.lsp.dev/pkg/xcontext",
+        "//third_party/go/go.lsp.dev/uri",
+        "//third_party/go/go.uber.org/zap",
+    ],
+)

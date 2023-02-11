@@ -1,0 +1,30 @@
+subinclude("//build_defs:go")
+
+package(default_visibility = ["//server/..."])
+
+go_library(
+    name = "accessor",
+    srcs = [
+        "jsonrpc.go",
+        "os.go",
+    ],
+    visibility = ["//..."],
+    deps = [
+        "//third_party/go/go.lsp.dev/jsonrpc2",
+        "//third_party/go/go.lsp.dev/protocol",
+    ],
+)
+
+go_mock(
+    name = "mock_accessor",
+    interfaces = [
+        "JsonRpcAccessor",
+        "OSAccessor",
+    ],
+    package = "github.com/KobraKommander9/proto-language-server/server/adapters/jsonrpc/accessor",
+    deps = [
+        "//server/adapters/jsonrpc/accessor",
+        "//third_party/go/go.lsp.dev/jsonrpc2",
+        "//third_party/go/go.lsp.dev/protocol",
+    ],
+)
