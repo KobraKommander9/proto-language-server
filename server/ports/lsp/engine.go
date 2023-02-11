@@ -21,4 +21,6 @@ package lsp
 // Engine -
 type Engine interface {
 	Close() error
+
+	Initialized() bool
 }

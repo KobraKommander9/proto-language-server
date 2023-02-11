@@ -18,15 +18,30 @@
 // Package app defines and implements the domain of the server
 package app
 
+import "sync"
+
 // Engine -
-type Engine struct{}
+type Engine struct {
+	lock        *sync.Mutex
+	initialized bool
+}
 
 // NewEngine -
 func NewEngine() *Engine {
-	return &Engine{}
+	return &Engine{
+		lock: &sync.Mutex{},
+	}
 }
 
 // Close -
 func (*Engine) Close() error {
 	return nil
+}
+
+// Initialized -
+func (e *Engine) Initialized() bool {
+	e.lock.Lock()
+	defer e.lock.Unlock()
+
+	return e.initialized
 }
