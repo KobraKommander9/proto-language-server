@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/KobraKommander9/proto-language-server/server/adapters/http"
+	"github.com/KobraKommander9/proto-language-server/server/adapters/jsonrpc"
 	"github.com/KobraKommander9/proto-language-server/server/app"
 	"github.com/KobraKommander9/proto-language-server/server/ports/lsp"
 	"github.com/KobraKommander9/proto-language-server/server/ports/public"
@@ -37,7 +37,7 @@ const (
 )
 
 const (
-	httpType = "http://"
+	jsonrpcType = "jsonrpc://"
 )
 
 // StartCmd -
@@ -61,16 +61,16 @@ var StartCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(StartCmd)
 
-	StartCmd.PersistentFlags().String(lspType, "http://127.0.0.1:8000", "name and port for lsp service")
+	StartCmd.PersistentFlags().String(lspType, "jsonrpc://127.0.0.1:8000", "name and port for lsp service")
 	_ = viper.BindPFlag(lspType, StartCmd.PersistentFlags().Lookup(lspType))
 }
 
 func createLspServer(t string, service lsp.Service) (server public.Server, err error) {
 	switch {
-	case strings.HasPrefix(t, httpType):
-		log.Infof("creating http lsp service for address %s", t)
-		lsp := http.NewLspService(service)
-		server = http.NewPublicServer(strings.TrimPrefix(t, httpType), lsp, &http.DefaultAccessor{})
+	case strings.HasPrefix(t, jsonrpcType):
+		log.Infof("creating jsonrpc lsp service for address %s", t)
+		lsp := jsonrpc.NewLspServer(service)
+		server = jsonrpc.NewPublicServer("tcp", strings.TrimPrefix(t, jsonrpcType), lsp, &jsonrpc.DefaultAccessor{})
 
 	default:
 		return nil, fmt.Errorf("unknown lsp server type %s", t)

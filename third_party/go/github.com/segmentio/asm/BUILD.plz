@@ -1,0 +1,19 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "asm",
+    install = [
+        "ascii",
+        "base64",
+        "cpu",
+        "cpu/arm",
+        "cpu/arm64",
+        "cpu/cpuid",
+        "cpu/x86",
+        "internal/unsafebytes",
+        "keyset",
+    ],
+    module = "github.com/segmentio/asm",
+    version = "v1.2.0",
+    deps = ["//third_party/go/golang.org/x/sys"],
+)

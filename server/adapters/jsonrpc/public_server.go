@@ -15,46 +15,34 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package http defines and implements types that interact with http
-package http
+// Package jsonrpc defines and implements types that interact with jsonrpc
+package jsonrpc
 
 import (
-	nhttp "net/http"
-
-	"github.com/KobraKommander9/proto-language-server/server/ports/http"
-
 	log "github.com/sirupsen/logrus"
+	"go.lsp.dev/jsonrpc2"
 )
 
 // PublicServer -
 type PublicServer struct {
 	Accessor
+	network string
 	addr    string
-	service http.Service
+	server  jsonrpc2.StreamServer
 }
 
 // NewPublicServer -
-func NewPublicServer(addr string, service http.Service, accessor Accessor) *PublicServer {
+func NewPublicServer(network, addr string, server jsonrpc2.StreamServer, accessor Accessor) *PublicServer {
 	return &PublicServer{
 		Accessor: accessor,
+		network:  network,
 		addr:     addr,
-		service:  service,
+		server:   server,
 	}
 }
 
 // Serve -
 func (s *PublicServer) Serve() error {
-	server, err := s.Accessor.Serve(s.addr, s.service)
-	if err != nil {
-		log.WithError(err).Warnf("could not serve %s http service", s.service.Name())
-		return err
-	}
-
-	log.Infof("%s http service started", s.service.Name())
-	if err = server.Serve(); err != nil && err != nhttp.ErrServerClosed {
-		log.WithError(err).Warnf("could not close %s server", s.service.Name())
-		return err
-	}
-
-	return nil
+	log.Infof("serving jsonrpc server with %s on %s", s.network, s.addr)
+	return s.ListenAndServe(s.network, s.addr, s.server)
 }

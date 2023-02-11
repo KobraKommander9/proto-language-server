@@ -1,0 +1,13 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "encoding",
+    install = [
+        "ascii",
+        "iso8601",
+        "json",
+    ],
+    module = "github.com/segmentio/encoding",
+    version = "v0.3.6",
+    deps = ["//third_party/go/github.com/segmentio/asm"],
+)
