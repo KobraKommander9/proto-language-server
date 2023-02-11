@@ -15,14 +15,30 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package http defines and implements types for communicating over http
-package http
+// Package jsonrpc defines and implements types that interact with jsonrpc
+package jsonrpc
 
-import "net/http"
+import (
+	"context"
 
-// Service -
-type Service interface {
-	Close() error
-	Name() string
-	Register(*http.ServeMux) error
+	"github.com/KobraKommander9/proto-language-server/server/ports/lsp"
+
+	"go.lsp.dev/jsonrpc2"
+)
+
+// LspServer -
+type LspServer struct {
+	service lsp.Service
+}
+
+// NewLspServer -
+func NewLspServer(service lsp.Service) *LspServer {
+	return &LspServer{
+		service: service,
+	}
+}
+
+// ServeStream -
+func (*LspServer) ServeStream(context.Context, jsonrpc2.Conn) error {
+	return nil
 }

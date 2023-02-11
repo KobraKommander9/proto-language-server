@@ -3,16 +3,6 @@ subinclude("//build_defs:go")
 package(default_visibility = ["//server/..."])
 
 go_mock(
-    name = "mock_http",
-    interfaces = [
-        "ConnServer",
-        "Service",
-    ],
-    package = "github.com/KobraKommander9/proto-language-server/server/ports/http",
-    deps = ["//server/ports/http"],
-)
-
-go_mock(
     name = "mock_lsp",
     interfaces = [
         "Service",

@@ -15,20 +15,24 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package http defines and implements types that interact with http
-package http
+// Package jsonrpc defines and implements types that interact with jsonrpc
+package jsonrpc
 
-import "github.com/KobraKommander9/proto-language-server/server/ports/http"
+import (
+	"context"
 
-// Accessor - interface abstracting the http client so we can test
+	"go.lsp.dev/jsonrpc2"
+)
+
+// Accessor -
 type Accessor interface {
-	Serve(addr string, service http.Service) (*http.Server, error)
+	ListenAndServe(network, addr string, server jsonrpc2.StreamServer) error
 }
 
 // DefaultAccessor -
 type DefaultAccessor struct{}
 
-// Serve -
-func (*DefaultAccessor) Serve(addr string, service http.Service) (*http.Server, error) {
-	return http.Serve(addr, service)
+// ListenAndServe -
+func (*DefaultAccessor) ListenAndServe(network, addr string, server jsonrpc2.StreamServer) error {
+	return jsonrpc2.ListenAndServe(context.Background(), network, addr, server, 0)
 }
