@@ -19,8 +19,9 @@
 package jsonrpc
 
 import (
+	"github.com/KobraKommander9/proto-language-server/server/ports/jsonrpc"
+
 	log "github.com/sirupsen/logrus"
-	"go.lsp.dev/jsonrpc2"
 )
 
 // PublicServer -
@@ -28,11 +29,11 @@ type PublicServer struct {
 	Accessor
 	network string
 	addr    string
-	server  jsonrpc2.StreamServer
+	server  jsonrpc.Server
 }
 
 // NewPublicServer -
-func NewPublicServer(network, addr string, server jsonrpc2.StreamServer, accessor Accessor) *PublicServer {
+func NewPublicServer(network, addr string, server jsonrpc.Server, accessor Accessor) *PublicServer {
 	return &PublicServer{
 		Accessor: accessor,
 		network:  network,
@@ -44,5 +45,5 @@ func NewPublicServer(network, addr string, server jsonrpc2.StreamServer, accesso
 // Serve -
 func (s *PublicServer) Serve() error {
 	log.Infof("serving jsonrpc server with %s on %s", s.network, s.addr)
-	return s.ListenAndServe(s.network, s.addr, s.server)
+	return s.ListenAndServe(s.network, s.addr, s.HandlerServer(s.server.HandleRequest))
 }

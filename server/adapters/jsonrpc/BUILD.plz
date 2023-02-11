@@ -11,19 +11,11 @@ go_library(
     ],
     visibility = ["//..."],
     deps = [
+        "//server/ports/jsonrpc",
         "//server/ports/lsp",
         "//third_party/go/github.com/sirupsen/logrus",
         "//third_party/go/go.lsp.dev/jsonrpc2",
     ],
-)
-
-go_mock(
-    name = "mock_jsonrpc2",
-    interfaces = [
-        "StreamServer",
-    ],
-    package = "go.lsp.dev/jsonrpc2",
-    deps = ["//third_party/go/go.lsp.dev/jsonrpc2"],
 )
 
 go_mock(

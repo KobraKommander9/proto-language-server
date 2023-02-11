@@ -26,11 +26,17 @@ import (
 
 // Accessor -
 type Accessor interface {
+	HandlerServer(h jsonrpc2.Handler) jsonrpc2.StreamServer
 	ListenAndServe(network, addr string, server jsonrpc2.StreamServer) error
 }
 
 // DefaultAccessor -
 type DefaultAccessor struct{}
+
+// HandlerServer -
+func (*DefaultAccessor) HandlerServer(h jsonrpc2.Handler) jsonrpc2.StreamServer {
+	return jsonrpc2.HandlerServer(h)
+}
 
 // ListenAndServe -
 func (*DefaultAccessor) ListenAndServe(network, addr string, server jsonrpc2.StreamServer) error {

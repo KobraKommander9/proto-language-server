@@ -38,7 +38,7 @@ func NewLspServer(service lsp.Service) *LspServer {
 	}
 }
 
-// ServeStream -
-func (*LspServer) ServeStream(context.Context, jsonrpc2.Conn) error {
+// HandleRequest -
+func (*LspServer) HandleRequest(ctx context.Context, reply jsonrpc2.Replier, req jsonrpc2.Request) error {
 	return nil
 }
