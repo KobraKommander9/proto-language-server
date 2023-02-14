@@ -41,10 +41,6 @@ func newStdio(a1 accessor.JsonRpcAccessor, a2 accessor.OSAccessor) *stdio {
 	}
 }
 
-func (s *stdio) apply(opts *ServerOptions) {
-	opts.method = s
-}
-
 func (s *stdio) serve(ctx context.Context, server protocol.Server) error {
 	s.l.Infof("serving jsonrpc server over stdio")
 

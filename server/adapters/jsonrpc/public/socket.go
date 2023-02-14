@@ -41,10 +41,6 @@ func newSocket(a accessor.JsonRpcAccessor, port uint32) *socket {
 	}
 }
 
-func (s *socket) apply(opts *ServerOptions) {
-	opts.method = s
-}
-
 func (s *socket) serve(ctx context.Context, server protocol.Server) error {
 	s.l.Infof("serving jsonrpc server over socket with port %d", s.port)
 	return s.ListenAndServe(ctx, s.port, server)

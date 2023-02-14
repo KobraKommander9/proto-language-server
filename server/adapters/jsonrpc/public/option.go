@@ -22,14 +22,14 @@ import (
 	"github.com/KobraKommander9/proto-language-server/server/adapters/jsonrpc/accessor"
 )
 
-// Option -
-type Option interface {
-	apply(s *ServerOptions)
-}
-
 // ServerOptions -
 type ServerOptions struct {
 	method method
+}
+
+// Option -
+type Option interface {
+	apply(s *ServerOptions)
 }
 
 func newServerOptions() ServerOptions {
@@ -38,12 +38,30 @@ func newServerOptions() ServerOptions {
 	}
 }
 
+type funcOption struct {
+	f func(*ServerOptions)
+}
+
+func (o *funcOption) apply(opts *ServerOptions) {
+	o.f(opts)
+}
+
+func newFuncOption(f func(*ServerOptions)) Option {
+	return &funcOption{
+		f: f,
+	}
+}
+
 // WithStdio -
 func WithStdio(a1 accessor.JsonRpcAccessor, a2 accessor.OSAccessor) Option {
-	return newStdio(a1, a2)
+	return newFuncOption(func(opts *ServerOptions) {
+		opts.method = newStdio(a1, a2)
+	})
 }
 
 // WithSocket -
 func WithSocket(a accessor.JsonRpcAccessor, port uint32) Option {
-	return newSocket(a, port)
+	return newFuncOption(func(opts *ServerOptions) {
+		opts.method = newSocket(a, port)
+	})
 }
