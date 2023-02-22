@@ -1,6 +1,14 @@
 go_library(
     name = "app",
-    srcs = ["engine.go"],
+    srcs = [
+        "capabilities.go",
+        "config.go",
+        "engine.go",
+        "info.go",
+    ],
     visibility = ["//..."],
-    deps = ["//third_party/go/go.uber.org/zap"],
+    deps = [
+        "//third_party/go/go.lsp.dev/protocol",
+        "//third_party/go/go.uber.org/zap",
+    ],
 )

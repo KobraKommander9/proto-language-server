@@ -1,13 +1,15 @@
 go_library(
     name = "jsonrpc",
     srcs = [
-        "accessor.go",
+        "lifecycle.go",
         "lsp_server.go",
+        "sync.go",
+        "window.go",
+        "workspace.go",
     ],
     visibility = ["//..."],
     deps = [
         "//server/ports/lsp",
-        "//third_party/go/go.lsp.dev/jsonrpc2",
         "//third_party/go/go.lsp.dev/protocol",
         "//third_party/go/go.uber.org/zap",
     ],
