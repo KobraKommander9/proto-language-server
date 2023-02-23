@@ -96,7 +96,7 @@ func createPublicServer(lspServer *jsonrpc.LspServer) (server public.Server, err
 
 	switch {
 	case port != 0:
-		zap.S().Infof("")
+		zap.S().Infof("creating jsonrpc lsp server on port %d", port)
 		server = jp.NewPublicServer(zap.S(), lspServer, jp.WithSocket(&accessor.DefaultJsonRpcAccessor{}, port))
 
 	case viper.GetBool(stdioMethod):

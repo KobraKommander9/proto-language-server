@@ -49,20 +49,5 @@ func (s *stdio) serve(ctx context.Context, server protocol.Server) error {
 	<-conn.Done()
 
 	s.l.Infof("finished serving jsonrpc server over stdio")
-	return nil
-}
-
-// Read -
-func (s *stdio) Read(b []byte) (int, error) {
-	return s.OSAccessor.Read(b)
-}
-
-// Write -
-func (s *stdio) Write(b []byte) (int, error) {
-	return s.OSAccessor.Write(b)
-}
-
-// Close -
-func (*stdio) Close() error {
-	return nil
+	return conn.Err()
 }

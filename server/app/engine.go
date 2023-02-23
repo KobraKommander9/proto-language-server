@@ -19,18 +19,20 @@
 package app
 
 import (
+	"fmt"
 	"sync"
 
-	"go.lsp.dev/protocol"
+	"go.uber.org/atomic"
 	"go.uber.org/zap"
 )
 
 // Engine -
 type Engine struct {
 	EngineInfo
-	l      *zap.SugaredLogger
-	lock   *sync.Mutex
-	config *EngineConfig
+	l        *zap.SugaredLogger
+	lock     *sync.Mutex
+	config   *EngineConfig
+	shutdown *atomic.Bool
 }
 
 // NewEngine -
@@ -39,43 +41,19 @@ func NewEngine(l *zap.SugaredLogger, info EngineInfo) *Engine {
 		EngineInfo: info,
 		l:          l.Named("engine"),
 		lock:       &sync.Mutex{},
+		shutdown:   atomic.NewBool(false),
 	}
 }
 
 // Close -
 func (e *Engine) Close() error {
 	e.l.Infof("closing engine...")
-	e.l.Infof("successfully closed engine")
-	return nil
-}
 
-// Initialize - The initialize request is the first request form the client to the server. If
-// the server receives a request or notification before the initialize request it should act as
-// follows:
-//   - For a request the response should be an error with code: -32002. The message can be
-//     picked by the server
-//   - Notifications should be dropped, except for the exit notification. This will allow
-//     the exit of a server without an initialization request.
-//
-// Until the server has responded to the initialize request with an InitializeResult, the client
-// must not send any additional requests or notifications to the server. In addition the server is
-// not allowed to send any requests or notifications to the client until it has responded with an
-// InitializeResult, with the exception that during the initialize request the server is allowed to
-// send the notifications window/showMessage, window/logMessage and telemetry/event as well as the
-// window/showMessageRequest request to the client. In case the client sets up a progress token in
-// the initialize params the server is also allowed to use that token (and only that token) using
-// the $/progress notification sent from the server to the client.
-//
-// The initialize request may only be sent once.
-func (e *Engine) Initialize() protocol.InitializeResult {
-	e.lock.Lock()
-	defer e.lock.Unlock()
-
-	return protocol.InitializeResult{
-		Capabilities: e.Capabilities(),
-		ServerInfo: &protocol.ServerInfo{
-			Name:    e.Name,
-			Version: e.Version,
-		},
+	if e.shutdown.Load() {
+		e.l.Infof("successfully closed engine")
+		return nil
 	}
+
+	e.l.Warnf("failed to shutdown engine before closing")
+	return fmt.Errorf("engine wasn't shutdown before closing")
 }

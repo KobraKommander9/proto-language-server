@@ -24,15 +24,23 @@ import "os"
 type OSAccessor interface {
 	Read(b []byte) (int, error)
 	Write(b []byte) (int, error)
+	Close() error
 }
 
 // DefaultOSAccessor -
 type DefaultOSAccessor struct{}
 
+// Read -
 func (*DefaultOSAccessor) Read(b []byte) (int, error) {
 	return os.Stdin.Read(b)
 }
 
+// Write -
 func (*DefaultOSAccessor) Write(b []byte) (int, error) {
 	return os.Stdout.Write(b)
+}
+
+// Close -
+func (*DefaultOSAccessor) Close() error {
+	return nil
 }
