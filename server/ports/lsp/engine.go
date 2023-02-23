@@ -18,9 +18,18 @@
 // Package lsp defines how to interact with the lsp
 package lsp
 
+import (
+	"context"
+
+	"go.lsp.dev/protocol"
+)
+
 // Engine -
 type Engine interface {
 	Close() error
 
-	Initialized() bool
+	Initialize(ctx context.Context, params *protocol.InitializeParams) (*protocol.InitializeResult, error)
+	Initialized(ctx context.Context) error
+	SetTrace(ctx context.Context, params *protocol.SetTraceParams) error
+	Shutdown(ctx context.Context) error
 }

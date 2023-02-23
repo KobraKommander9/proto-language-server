@@ -29,19 +29,21 @@ import (
 // Engine -
 type Engine struct {
 	EngineInfo
-	l        *zap.SugaredLogger
-	lock     *sync.Mutex
-	config   *EngineConfig
-	shutdown *atomic.Bool
+	l           *zap.SugaredLogger
+	lock        *sync.Mutex
+	config      *EngineConfig
+	initialized *atomic.Bool
+	shutdown    *atomic.Bool
 }
 
 // NewEngine -
 func NewEngine(l *zap.SugaredLogger, info EngineInfo) *Engine {
 	return &Engine{
-		EngineInfo: info,
-		l:          l.Named("engine"),
-		lock:       &sync.Mutex{},
-		shutdown:   atomic.NewBool(false),
+		EngineInfo:  info,
+		l:           l.Named("engine"),
+		lock:        &sync.Mutex{},
+		initialized: atomic.NewBool(false),
+		shutdown:    atomic.NewBool(false),
 	}
 }
 

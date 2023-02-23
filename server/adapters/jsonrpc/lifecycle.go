@@ -26,18 +26,18 @@ import (
 )
 
 // Initialize -
-func (*LspServer) Initialize(context.Context, *p.InitializeParams) (*p.InitializeResult, error) {
-	return nil, fmt.Errorf("unimplemented")
+func (s *LspServer) Initialize(ctx context.Context, params *p.InitializeParams) (*p.InitializeResult, error) {
+	return s.engine.Initialize(ctx, params)
 }
 
 // Initialized -
-func (*LspServer) Initialized(context.Context, *p.InitializedParams) error {
-	return fmt.Errorf("unimplemented")
+func (s *LspServer) Initialized(ctx context.Context, _ *p.InitializedParams) error {
+	return s.engine.Initialized(ctx)
 }
 
 // SetTrace -
-func (*LspServer) SetTrace(ctx context.Context, params *p.SetTraceParams) error {
-	return fmt.Errorf("unimplemented")
+func (s *LspServer) SetTrace(ctx context.Context, params *p.SetTraceParams) error {
+	return s.engine.SetTrace(ctx, params)
 }
 
 // LogTrace -
@@ -46,11 +46,11 @@ func (*LspServer) LogTrace(ctx context.Context, params *p.LogTraceParams) error 
 }
 
 // Shutdown -
-func (*LspServer) Shutdown(context.Context) error {
-	return fmt.Errorf("unimplemented")
+func (s *LspServer) Shutdown(ctx context.Context) error {
+	return s.engine.Shutdown(ctx)
 }
 
 // Exit -
-func (*LspServer) Exit(context.Context) error {
-	return fmt.Errorf("unimplemented")
+func (s *LspServer) Exit(context.Context) error {
+	return s.engine.Close()
 }

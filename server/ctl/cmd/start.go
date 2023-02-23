@@ -54,7 +54,10 @@ var StartCmd = &cobra.Command{
 	RunE: func(_ *cobra.Command, _ []string) error {
 		ctx := context.Background()
 
-		engine := app.NewEngine(zap.S())
+		engine := app.NewEngine(zap.S(), app.EngineInfo{
+			Name:    "proto-language-server",
+			Version: "0.0.1",
+		})
 
 		server, err := createLspServer(viper.GetString(lspType), engine)
 		if err != nil {

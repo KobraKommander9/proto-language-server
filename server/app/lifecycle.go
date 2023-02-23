@@ -19,6 +19,9 @@
 package app
 
 import (
+	"context"
+	"fmt"
+
 	"go.lsp.dev/protocol"
 )
 
@@ -40,26 +43,78 @@ import (
 // the $/progress notification sent from the server to the client.
 //
 // The initialize request may only be sent once.
-func (e *Engine) Initialize() protocol.InitializeResult {
+func (e *Engine) Initialize(_ context.Context, params *protocol.InitializeParams) (*protocol.InitializeResult, error) {
 	e.lock.Lock()
 	defer e.lock.Unlock()
 
-	return protocol.InitializeResult{
+	if params == nil {
+		e.l.Warnf("attempted to initialize server with nil params")
+		return nil, fmt.Errorf("cannot initialize with nil params")
+	}
+
+	e.config = &EngineConfig{
+		clientInfo:       params.ClientInfo,
+		capabilities:     params.Capabilities,
+		workspaceFolders: params.WorkspaceFolders,
+		workDoneToken:    params.WorkDoneToken,
+	}
+
+	if params.ProcessID != 0 {
+		e.config.processId = &params.ProcessID
+	}
+
+	if params.RootPath != "" {
+		e.config.rootPath = &params.RootPath
+	}
+
+	if params.RootURI != "" {
+		e.config.rootUri = &params.RootURI
+	}
+
+	if params.Trace != "" {
+		e.config.trace = &params.Trace
+	}
+
+	return &protocol.InitializeResult{
 		Capabilities: e.Capabilities(),
 		ServerInfo: &protocol.ServerInfo{
 			Name:    e.Name,
 			Version: e.Version,
 		},
+	}, nil
+}
+
+// Initialized - The initialized notification is sent from the client to the server after the client
+// received the result of the initialize request but before the client is sending any other request
+// or notification to the server. The server can use the initialized notification for example to
+// dynamically register capabilities. The initialized notification may only be sent once.
+func (e *Engine) Initialized(context.Context) error {
+	e.lock.Lock()
+	defer e.lock.Unlock()
+
+	if e.config == nil {
+		e.l.Warnf("never initialized server before calling Initialized")
+		return fmt.Errorf("server must be initialized")
 	}
+
+	if e.initialized.Load() {
+		e.l.Warnf("already checked if the server was initialized")
+		return fmt.Errorf("cannot call Initialized more than once")
+	}
+
+	e.initialized.Store(true)
+	return nil
 }
 
 // SetTrace - A notification that should be used by the client to modify the trace setting of the
 // server.
-func (e *Engine) SetTrace(params *protocol.SetTraceParams) {
+func (e *Engine) SetTrace(_ context.Context, params *protocol.SetTraceParams) error {
 	e.lock.Lock()
 	defer e.lock.Unlock()
 
 	e.config.trace = &params.Value
+
+	return nil
 }
 
 // Shutdown - The shutdown request is sent from the client to the server. It asks the server to shut
@@ -70,10 +125,13 @@ func (e *Engine) SetTrace(params *protocol.SetTraceParams) {
 // from the shutdown request.
 //
 // If a server receives requests after a shutdown request those requests should error with InvalidRequest.
-func (e *Engine) Shutdown() {
+func (e *Engine) Shutdown(context.Context) error {
 	if e.shutdown.Load() {
-		return
+		e.l.Warnf("server already notified of shutdown")
+		return fmt.Errorf("server already notified of shutdown")
 	}
-	
+
 	e.shutdown.Store(true)
+	
+	return nil
 }
