@@ -8,7 +8,10 @@ go_mock(
         "Engine",
     ],
     package = "github.com/KobraKommander9/proto-language-server/server/ports/lsp",
-    deps = ["//server/ports/lsp"],
+    deps = [
+        "//server/ports/lsp",
+        "//third_party/go/go.lsp.dev/protocol",
+    ],
 )
 
 go_mock(

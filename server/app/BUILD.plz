@@ -4,11 +4,15 @@ go_library(
         "capabilities.go",
         "config.go",
         "engine.go",
+        "hover.go",
         "info.go",
+        "lifecycle.go",
     ],
     visibility = ["//..."],
     deps = [
         "//third_party/go/go.lsp.dev/protocol",
+        "//third_party/go/go.uber.org/atomic",
         "//third_party/go/go.uber.org/zap",
+        "//third_party/go/google.golang.org/protobuf",
     ],
 )

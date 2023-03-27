@@ -1,0 +1,20 @@
+package(default_visibility = ["PUBLIC"])
+
+go_module(
+    name = "protobuf",
+    install = [
+        "compiler/protogen",
+        "encoding/protowire",
+        "internal/detrand",
+        "internal/encoding/messageset",
+        "internal/errors",
+        "internal/flags",
+        "internal/pragma",
+        "proto",
+        "reflect/protoreflect",
+        "reflect/protoregistry",
+        "types/descriptorpb",
+    ],
+    module = "google.golang.org/protobuf",
+    version = "v1.30.0",
+)

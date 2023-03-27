@@ -2,4 +2,5 @@ go_library(
     name = "lsp",
     srcs = ["engine.go"],
     visibility = ["//server/..."],
+    deps = ["//third_party/go/go.lsp.dev/protocol"],
 )

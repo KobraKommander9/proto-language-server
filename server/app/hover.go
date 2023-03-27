@@ -18,11 +18,23 @@
 // Package app defines and implements the domain of the server
 package app
 
-import "go.lsp.dev/protocol"
+import (
+	"context"
 
-// Capabilities -
-func (e *Engine) Capabilities() protocol.ServerCapabilities {
-	return protocol.ServerCapabilities{
-		HoverProvider: true,
+	"go.lsp.dev/protocol"
+	"google.golang.org/protobuf/reflect/protoregistry"
+)
+
+// Hover - The hover request is sent from the client to the server to
+// request hover information at a given text document position.
+func (e *Engine) Hover(_ context.Context, params *protocol.HoverParams) (*protocol.Hover, error) {
+	uri := params.TextDocument.URI
+	// pos := params.Position
+	registry := protoregistry.GlobalFiles
+	_, err := registry.FindFileByPath(string(uri))
+	if err != nil {
+		return nil, err
 	}
+
+	return nil, nil
 }
