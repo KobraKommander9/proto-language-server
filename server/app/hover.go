@@ -20,8 +20,12 @@ package app
 
 import (
 	"context"
+	"fmt"
+	"regexp"
+	"strings"
 
 	"go.lsp.dev/protocol"
+	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/reflect/protoregistry"
 )
 
@@ -29,7 +33,7 @@ import (
 // request hover information at a given text document position.
 func (e *Engine) Hover(_ context.Context, params *protocol.HoverParams) (*protocol.Hover, error) {
 	uri := params.TextDocument.URI
-	// pos := params.Position
+	pos := params.Position
 	registry := protoregistry.GlobalFiles
 	_, err := registry.FindFileByPath(string(uri))
 	if err != nil {
@@ -37,4 +41,42 @@ func (e *Engine) Hover(_ context.Context, params *protocol.HoverParams) (*protoc
 	}
 
 	return nil, nil
+}
+
+// getFullName - returns the full name to the message or field at the given position.
+func (e *Engine) getFullName(file protoreflect.FileDescriptor, pos protocol.Position) (string, error) {
+	line := pos.Line + 1
+	col := int(pos.Character)
+
+	data, err := e.clients.Filesystem.ReadFile(string(file.Path()))
+	if err != nil {
+		return "", err
+	}
+
+	lineStart := 0
+	for i := 1; i < int(line); i++ {
+		idx := strings.IndexByte(string(data[lineStart:]), '\n') + 1
+		if idx == 0 {
+			return "", fmt.Errorf("line %d not found", line)
+		}
+		lineStart += idx
+	}
+
+	lineEnd := lineStart + strings.IndexByte(string(data[lineStart:]), '\n')
+	if lineEnd == -1 {
+		lineEnd = len(data)
+	}
+
+	lineData := string(data[lineStart:lineEnd])
+
+	identifiers := regexp.MustCompile(`[A-Za-z_][A-Za-z_0-9]*`)
+	posInLine := 0
+	for _, identifier := range identifiers.FindAllString(lineData, -1) {
+		if col >= posInLine && col < posInLine+len(identifier) {
+			return identifier, nil
+		}
+		posInLine += len(identifier)
+	}
+
+	return "", fmt.Errorf("identifier not found")
 }

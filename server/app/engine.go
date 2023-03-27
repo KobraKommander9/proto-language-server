@@ -29,7 +29,10 @@ import (
 // Engine -
 type Engine struct {
 	EngineInfo
-	l           *zap.SugaredLogger
+	l         *zap.SugaredLogger
+	clients   Clients
+	accessors Accessors
+
 	lock        *sync.Mutex
 	config      *EngineConfig
 	initialized *atomic.Bool
@@ -37,10 +40,12 @@ type Engine struct {
 }
 
 // NewEngine -
-func NewEngine(l *zap.SugaredLogger, info EngineInfo) *Engine {
+func NewEngine(l *zap.SugaredLogger, info EngineInfo, clients Clients, accessors Accessors) *Engine {
 	return &Engine{
 		EngineInfo:  info,
 		l:           l.Named("engine"),
+		clients:     clients,
+		accessors:   accessors,
 		lock:        &sync.Mutex{},
 		initialized: atomic.NewBool(false),
 		shutdown:    atomic.NewBool(false),
@@ -50,6 +55,8 @@ func NewEngine(l *zap.SugaredLogger, info EngineInfo) *Engine {
 // Close -
 func (e *Engine) Close() error {
 	e.l.Infof("closing engine...")
+
+	e.clients.Close(e.l)
 
 	if e.shutdown.Load() {
 		e.l.Infof("successfully closed engine")

@@ -3,6 +3,7 @@ module github.com/KobraKommander9/proto-language-server
 go 1.18
 
 require (
+	github.com/golang/mock v1.4.4
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.15.0
 	go.lsp.dev/jsonrpc2 v0.10.0
