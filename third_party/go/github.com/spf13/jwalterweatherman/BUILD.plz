@@ -1,7 +1,0 @@
-package(default_visibility = ["PUBLIC"])
-
-go_module(
-    name = "jwalterweatherman",
-    module = "github.com/spf13/jwalterweatherman",
-    version = "v1.0.0",
-)

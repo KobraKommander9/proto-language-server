@@ -1,8 +1,0 @@
-package(default_visibility = ["PUBLIC"])
-
-filegroup(
-    name = "go",
-    srcs = [
-        "golang_extra.build_defs",
-    ],
-)

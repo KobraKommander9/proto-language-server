@@ -7,7 +7,6 @@ on:
       - third_party/go/**
       - go.mod
       - go.sum
-      - .plzconfig
   pull_request:
 jobs:
   build:
@@ -19,10 +18,8 @@ jobs:
         with:
           go-version: 1.18
           cache: true
-      - name: setup please
-        run: curl https://get.please.build | bash
       - name: build
-        run: source ~/.profile && plz build ./...
+        run: go build -o protols ./server/ctl
   test:
     runs-on: ubuntu-latest
     steps:
@@ -32,10 +29,8 @@ jobs:
         with:
           go-version: 1.18
           cache: true
-      - name: setup please
-        run: curl https://get.please.build | bash
       - name: test
-        run: source ~/.profile && plz test ./...
+        run: go test ./...
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -49,7 +44,7 @@ jobs:
         run: go install github.com/mgechev/revive@latest
       - name: lint
         run: |
-          revive -exclude "plz-out/..." -config ./config.toml -formatter default ./... &2>1 revive_report.txt
+          revive -config ./config.toml -formatter default ./... &2>1 revive_report.txt
           G_PROBLEMS=$( wc -l < revive_report.txt )
           if [[ "$G_PROBLEMS" -gt 0 ]]; then
             echo -e "\033[0;31mError. Number of problems ($G_PROBLEMS) exceeded acceptable value of 0"

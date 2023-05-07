@@ -1,7 +1,0 @@
-package(default_visibility = ["PUBLIC"])
-
-go_module(
-    name = "gotenv",
-    module = "github.com/subosito/gotenv",
-    version = "v1.2.0",
-)

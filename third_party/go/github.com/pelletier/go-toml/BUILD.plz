@@ -1,7 +1,0 @@
-package(default_visibility = ["PUBLIC"])
-
-go_module(
-    name = "go-toml",
-    module = "github.com/pelletier/go-toml",
-    version = "v1.2.0",
-)
