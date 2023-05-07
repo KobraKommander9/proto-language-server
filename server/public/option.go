@@ -15,12 +15,10 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package public defines and implements public facing types for jsonrpc
+// Package public defines and implements public facing types
 package public
 
-import (
-	"github.com/KobraKommander9/proto-language-server/server/adapters/jsonrpc/accessor"
-)
+import "github.com/KobraKommander9/proto-language-server/server/public/accessor"
 
 // ServerOptions -
 type ServerOptions struct {

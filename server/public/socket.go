@@ -15,39 +15,33 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package public defines and implements public facing types for jsonrpc
+// Package public defines and implements public facing types
 package public
 
 import (
 	"context"
 
-	"github.com/KobraKommander9/proto-language-server/server/adapters/jsonrpc/accessor"
+	"github.com/KobraKommander9/proto-language-server/server/public/accessor"
 
 	"go.lsp.dev/protocol"
 	"go.uber.org/zap"
 )
 
-type stdio struct {
+type socket struct {
 	accessor.JsonRpcAccessor
-	accessor.OSAccessor
-	l *zap.SugaredLogger
+	l    *zap.SugaredLogger
+	port uint32
 }
 
-func newStdio(a1 accessor.JsonRpcAccessor, a2 accessor.OSAccessor) *stdio {
-	return &stdio{
-		JsonRpcAccessor: a1,
-		OSAccessor:      a2,
-		l:               zap.S().Named("stdio"),
+func newSocket(a accessor.JsonRpcAccessor, port uint32) *socket {
+	return &socket{
+		JsonRpcAccessor: a,
+		l:               zap.S().Named("socket"),
+		port:            port,
 	}
 }
 
-func (s *stdio) serve(ctx context.Context, server protocol.Server) error {
-	s.l.Infof("serving jsonrpc server over stdio")
-
-	conn := s.NewConn(s.NewStream(s))
-	conn.Go(ctx, protocol.ServerHandler(server, nil))
-	<-conn.Done()
-
-	s.l.Infof("finished serving jsonrpc server over stdio")
-	return conn.Err()
+func (s *socket) serve(ctx context.Context, server protocol.Server) error {
+	s.l.Infof("serving jsonrpc server over socket with port %d", s.port)
+	return s.ListenAndServe(ctx, s.port, server)
 }
