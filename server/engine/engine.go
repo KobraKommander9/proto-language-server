@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package app defines and implements the domain of the server
-package app
+// Package engine defines how the lsp server behaves
+package engine
 
 import (
 	"fmt"

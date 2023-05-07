@@ -47,6 +47,7 @@ func NewProtocolServer(l *zap.SugaredLogger, server protocol.Server, opts ...Opt
 	return &ProtocolServer{
 		l:       l.Named("public"),
 		options: options,
+		server:  server,
 	}
 }
 
