@@ -1,6 +1,0 @@
-go_binary(
-    name = "ctl",
-    srcs = ["main.go"],
-    visibility = ["//server/..."],
-    deps = ["//server/ctl/cmd"],
-)

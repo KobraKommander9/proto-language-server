@@ -1,7 +1,0 @@
-package(default_visibility = ["PUBLIC"])
-
-go_module(
-    name = "atomic",
-    module = "go.uber.org/atomic",
-    version = "v1.10.0",
-)

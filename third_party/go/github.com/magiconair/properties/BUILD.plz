@@ -1,7 +1,0 @@
-package(default_visibility = ["PUBLIC"])
-
-go_module(
-    name = "properties",
-    module = "github.com/magiconair/properties",
-    version = "v1.8.1",
-)

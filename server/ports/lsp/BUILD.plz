@@ -1,5 +1,0 @@
-go_library(
-    name = "lsp",
-    srcs = ["engine.go"],
-    visibility = ["//server/..."],
-)
