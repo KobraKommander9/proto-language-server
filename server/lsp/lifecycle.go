@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package jsonrpc defines and implements types that interact with jsonrpc
-package jsonrpc
+// Package lsp defines the language server protocol
+package lsp
 
 import (
 	"context"
@@ -26,31 +26,31 @@ import (
 )
 
 // Initialize -
-func (s *LspServer) Initialize(ctx context.Context, params *p.InitializeParams) (*p.InitializeResult, error) {
+func (s *Server) Initialize(ctx context.Context, params *p.InitializeParams) (*p.InitializeResult, error) {
 	return s.engine.Initialize(ctx, params)
 }
 
 // Initialized -
-func (s *LspServer) Initialized(ctx context.Context, _ *p.InitializedParams) error {
+func (s *Server) Initialized(ctx context.Context, _ *p.InitializedParams) error {
 	return s.engine.Initialized(ctx)
 }
 
 // SetTrace -
-func (s *LspServer) SetTrace(ctx context.Context, params *p.SetTraceParams) error {
+func (s *Server) SetTrace(ctx context.Context, params *p.SetTraceParams) error {
 	return s.engine.SetTrace(ctx, params)
 }
 
 // LogTrace -
-func (*LspServer) LogTrace(ctx context.Context, params *p.LogTraceParams) error {
+func (*Server) LogTrace(ctx context.Context, params *p.LogTraceParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // Shutdown -
-func (s *LspServer) Shutdown(ctx context.Context) error {
+func (s *Server) Shutdown(ctx context.Context) error {
 	return s.engine.Shutdown(ctx)
 }
 
 // Exit -
-func (s *LspServer) Exit(context.Context) error {
+func (s *Server) Exit(context.Context) error {
 	return s.engine.Close()
 }

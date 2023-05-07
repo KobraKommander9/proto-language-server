@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package jsonrpc defines and implements types that interact with jsonrpc
-package jsonrpc
+// Package lsp defines the language server protocol
+package lsp
 
 import (
 	"context"
@@ -26,31 +26,31 @@ import (
 )
 
 // DidOpen -
-func (*LspServer) DidOpen(ctx context.Context, params *p.DidOpenTextDocumentParams) error {
+func (*Server) DidOpen(ctx context.Context, params *p.DidOpenTextDocumentParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // DidChange -
-func (*LspServer) DidChange(ctx context.Context, params *p.DidChangeTextDocumentParams) error {
+func (*Server) DidChange(ctx context.Context, params *p.DidChangeTextDocumentParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // WillSave -
-func (*LspServer) WillSave(ctx context.Context, params *p.WillSaveTextDocumentParams) error {
+func (*Server) WillSave(ctx context.Context, params *p.WillSaveTextDocumentParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // WillSaveWaitUntil -
-func (*LspServer) WillSaveWaitUntil(ctx context.Context, params *p.WillSaveTextDocumentParams) ([]p.TextEdit, error) {
+func (*Server) WillSaveWaitUntil(ctx context.Context, params *p.WillSaveTextDocumentParams) ([]p.TextEdit, error) {
 	return nil, fmt.Errorf("unimplemented")
 }
 
 // DidSave -
-func (*LspServer) DidSave(ctx context.Context, params *p.DidSaveTextDocumentParams) error {
+func (*Server) DidSave(ctx context.Context, params *p.DidSaveTextDocumentParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // DidClose -
-func (*LspServer) DidClose(ctx context.Context, params *p.DidCloseTextDocumentParams) error {
+func (*Server) DidClose(ctx context.Context, params *p.DidCloseTextDocumentParams) error {
 	return fmt.Errorf("unimplemented")
 }

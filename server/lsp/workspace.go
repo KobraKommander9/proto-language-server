@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package jsonrpc defines and implements types that interact with jsonrpc
-package jsonrpc
+// Package lsp defines the language server protocol
+package lsp
 
 import (
 	"context"
@@ -26,56 +26,56 @@ import (
 )
 
 // Symbols -
-func (*LspServer) Symbols(ctx context.Context, params *p.WorkspaceSymbolParams) ([]p.SymbolInformation, error) {
+func (*Server) Symbols(ctx context.Context, params *p.WorkspaceSymbolParams) ([]p.SymbolInformation, error) {
 	return nil, fmt.Errorf("unimplemented")
 }
 
 // DidChangeConfiguration -
-func (*LspServer) DidChangeConfiguration(ctx context.Context, params *p.DidChangeConfigurationParams) error {
+func (*Server) DidChangeConfiguration(ctx context.Context, params *p.DidChangeConfigurationParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // DidChangeWorkspaceFolders -
-func (*LspServer) DidChangeWorkspaceFolders(ctx context.Context, params *p.DidChangeWorkspaceFoldersParams) error {
+func (*Server) DidChangeWorkspaceFolders(ctx context.Context, params *p.DidChangeWorkspaceFoldersParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // WillCreateFiles -
-func (*LspServer) WillCreateFiles(ctx context.Context, params *p.CreateFilesParams) (*p.WorkspaceEdit, error) {
+func (*Server) WillCreateFiles(ctx context.Context, params *p.CreateFilesParams) (*p.WorkspaceEdit, error) {
 	return nil, fmt.Errorf("unimplemented")
 }
 
 // DidCreateFiles -
-func (*LspServer) DidCreateFiles(ctx context.Context, params *p.CreateFilesParams) error {
+func (*Server) DidCreateFiles(ctx context.Context, params *p.CreateFilesParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // WillRenameFiles -
-func (*LspServer) WillRenameFiles(ctx context.Context, params *p.RenameFilesParams) (*p.WorkspaceEdit, error) {
+func (*Server) WillRenameFiles(ctx context.Context, params *p.RenameFilesParams) (*p.WorkspaceEdit, error) {
 	return nil, fmt.Errorf("unimplemented")
 }
 
 // DidRenameFiles -
-func (*LspServer) DidRenameFiles(ctx context.Context, params *p.RenameFilesParams) error {
+func (*Server) DidRenameFiles(ctx context.Context, params *p.RenameFilesParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // WillDeleteFiles -
-func (*LspServer) WillDeleteFiles(ctx context.Context, params *p.DeleteFilesParams) (*p.WorkspaceEdit, error) {
+func (*Server) WillDeleteFiles(ctx context.Context, params *p.DeleteFilesParams) (*p.WorkspaceEdit, error) {
 	return nil, fmt.Errorf("unimplemented")
 }
 
 // DidDeleteFiles -
-func (*LspServer) DidDeleteFiles(ctx context.Context, params *p.DeleteFilesParams) error {
+func (*Server) DidDeleteFiles(ctx context.Context, params *p.DeleteFilesParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // DidChangeWatchedFiles -
-func (*LspServer) DidChangeWatchedFiles(ctx context.Context, params *p.DidChangeWatchedFilesParams) error {
+func (*Server) DidChangeWatchedFiles(ctx context.Context, params *p.DidChangeWatchedFilesParams) error {
 	return fmt.Errorf("unimplemented")
 }
 
 // ExecuteCommand -
-func (*LspServer) ExecuteCommand(ctx context.Context, params *p.ExecuteCommandParams) (any, error) {
+func (*Server) ExecuteCommand(ctx context.Context, params *p.ExecuteCommandParams) (any, error) {
 	return nil, fmt.Errorf("unimplemented")
 }

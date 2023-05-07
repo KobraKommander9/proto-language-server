@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License along with
 // proto-language-server. If not, see <https://www.gnu.org/licenses/>.
 
-// Package jsonrpc defines and implements types that interact with jsonrpc
-package jsonrpc
+// Package lsp defines the language server protocol
+package lsp
 
 import (
 	"context"
@@ -26,11 +26,11 @@ import (
 )
 
 // ShowDocument -
-func (*LspServer) ShowDocument(ctx context.Context, params *p.ShowDocumentParams) (*p.ShowDocumentResult, error) {
+func (*Server) ShowDocument(ctx context.Context, params *p.ShowDocumentParams) (*p.ShowDocumentResult, error) {
 	return nil, fmt.Errorf("unimplemented")
 }
 
 // WorkDoneProgressCancel -
-func (*LspServer) WorkDoneProgressCancel(ctx context.Context, params *p.WorkDoneProgressCancelParams) error {
+func (*Server) WorkDoneProgressCancel(ctx context.Context, params *p.WorkDoneProgressCancelParams) error {
 	return fmt.Errorf("unimplemented")
 }
